@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "Al0iRFFFcOrdKQWyvEXWkScKIgdi9My1uZFX98TMEPVr8rff7gkKAP71p2TrO1ZgPAeOmytA1K17hTx9AsmYfA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\irisv\\Source\\Repos\\EntertainmentService\\Tests\\Tests.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\irisv\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
+    "C:\\Users\\irisv\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\irisv\\.nuget\\packages\\moq\\4.18.4\\moq.4.18.4.nupkg.sha512",
+    "C:\\Users\\irisv\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
+    "C:\\Users\\irisv\\.nuget\\packages\\nunit\\3.13.3\\nunit.3.13.3.nupkg.sha512",
+    "C:\\Users\\irisv\\.nuget\\packages\\system.diagnostics.eventlog\\6.0.0\\system.diagnostics.eventlog.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
