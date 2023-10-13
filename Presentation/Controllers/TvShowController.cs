@@ -18,13 +18,13 @@ namespace Presentation.Controllers
             _logger = logger;
         }
 
-        [HttpPost]
-        public IActionResult AddNewShowsFromApiAsync()
+        [HttpGet]
+        public IActionResult GetNewShowsFromApiAsync()
         {
             return Ok(_tvShowService.AddNewShowsFromApiAsync());
         }
 
-        [HttpGet]
+        [HttpGet("name")]
         public IActionResult GetByName(string showName)
         {
             var show = _tvShowService.GetByNameAsync(showName);

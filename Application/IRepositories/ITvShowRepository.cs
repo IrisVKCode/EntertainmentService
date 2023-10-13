@@ -9,7 +9,7 @@ namespace Application.IRepositories
         Task Delete(int id);
         Task<IEnumerable<TvShow>> GetAll();
         Task<TvShow> GetByName(string name);
-        Task<TvShow> GetLatestAdded();
+        TvShow GetLatestAdded();
         Task Update(int id);
     }
 }

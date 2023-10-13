@@ -1,10 +1,7 @@
 ﻿
 using Application.Helpers;
 using Application.IHttpClients;
-using Domain;
-using Infrastructure.Models;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 
 namespace Infrastructure.HttpClients
 {
@@ -25,14 +22,17 @@ namespace Infrastructure.HttpClients
             {
                 string jsonContent = await response.Content.ReadAsStringAsync();
                 var shows = JsonConvert.DeserializeObject<List<Models.TvShow>>(jsonContent);
-                var showsMapped = shows.Select(s => new Domain.TvShow(
-                    s.Id, s.Name, s.Language, s.Premiered, s.Genres, HtmlHelpers.StripHTML(s.Summary)));
-                return showsMapped;
+
+                if (shows != null)
+                {
+                    var showsMapped = shows.Select(s => new Domain.TvShow(
+                        s.Id, s.Name, s.Language, s.Premiered, s.Genres, HtmlHelpers.StripHTML(s.Summary)));
+                    return showsMapped;
+                }
+
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
     }
 }

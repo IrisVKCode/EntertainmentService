@@ -19,19 +19,21 @@ namespace Application.Services
 
         public async Task AddNewShowsFromApiAsync()
         {
-            var startPage = 0;
+            var page = 0;
+
             var latestAddedShow = _tvShowRepository.GetLatestAdded();
             if (latestAddedShow?.Id != null)
-                startPage = (int)Math.Floor((double)latestAddedShow.Id / 250);
+                page = (int)Math.Floor((double)latestAddedShow.Id / 250);
 
             IEnumerable<TvShow> shows = null;
             do
             {
-                shows = await _tvShowClient.GetTvShowsAsync(startPage);
+                shows = await _tvShowClient.GetTvShowsAsync(page);
                 var showsFiltered = shows.Where(s => s.Premiered > new DateTime(2014, 01, 01));
                 await _tvShowRepository.AddBatch(showsFiltered);
-
-            } while (shows != null);
+                page++;
+            } 
+            while (shows != null);
         }
 
         public async Task<TvShow> GetByNameAsync(string name)

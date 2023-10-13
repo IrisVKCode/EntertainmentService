@@ -7,6 +7,7 @@ using Infrastructure.HttpClients;
 using Application.Services;
 using Polly;
 using Polly.Extensions.Http;
+using Infrastructure.BackgroundServices;
 
 namespace Infrastructure.Configuration
 {
@@ -28,8 +29,8 @@ namespace Infrastructure.Configuration
             {
                 client.BaseAddress = new Uri(config.TvMazeClientUrl);
             })
-            .AddPolicyHandler(GetRetryPolicy());
-            //.AddPolicyHandler(GetCircuitBreakerPolicy());
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddPolicyHandler(GetCircuitBreaker());
 
             return services;
         }
@@ -42,12 +43,26 @@ namespace Infrastructure.Configuration
             return services;
         }
 
+        public static IServiceCollection ConfigureBackgroundServices(this IServiceCollection services)
+        {
+            services.AddHostedService<TvShowBackgroundService>();
+
+            return services;
+        }
+
         private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
         {
             return HttpPolicyExtensions
                 .HandleTransientHttpError()
                 .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
-                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2,                                                                           retryAttempt)));
+                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetCircuitBreaker()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .CircuitBreakerAsync(6, TimeSpan.FromSeconds(30));
         }
     }
 }

@@ -27,6 +27,7 @@ builder.Services.Configure<HttpClientConfig>(httpClientConfigSection);
 var httpClientConfig = httpClientConfigSection.Get<HttpClientConfig>();
 
 builder.Services.ConfigureHttpClients(httpClientConfig);
+builder.Services.ConfigureBackgroundServices();
 
 var app = builder.Build();
 
