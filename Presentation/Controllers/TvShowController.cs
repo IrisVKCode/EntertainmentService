@@ -18,23 +18,21 @@ namespace Presentation.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IActionResult GetNewShowsFromApiAsync()
-        {
-            return Ok(_tvShowService.AddNewShowsFromApiAsync());
-        }
-
         [HttpGet("name")]
-        public IActionResult GetByName(string showName)
+        public async Task<IActionResult> GetByNameAsync(string showName)
         {
-            var show = _tvShowService.GetByNameAsync(showName);
+            var show = await _tvShowService.GetByName(showName);
 
             if (show == null)
-            {
                 return NotFound();
-            }
 
-            return Ok(_tvShowService.GetByNameAsync(showName));
+            return Ok(show);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            return Ok(await _tvShowService.GetAll());
         }
     }
 }

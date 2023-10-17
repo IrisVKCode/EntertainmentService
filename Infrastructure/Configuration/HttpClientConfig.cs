@@ -2,6 +2,6 @@
 {
     public class HttpClientConfig
     {
-        public string TvMazeClientUrl { get; set; }
+        public string? TvMazeClientUrl { get; set; }
     }
 }

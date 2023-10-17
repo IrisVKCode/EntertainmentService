@@ -26,13 +26,12 @@ namespace Infrastructure.HttpClients
                 if (shows != null)
                 {
                     var showsMapped = shows.Select(s => new Domain.TvShow(
-                        s.Id, s.Name, s.Language, s.Premiered, s.Genres, HtmlHelpers.StripHTML(s.Summary)));
+                        s.ExternalId, s.Name, s.Language, s.Premiered, s.Genres, HtmlHelpers.StripHTML(s.Summary)));
                     return showsMapped;
                 }
-
             }
 
-            return null;
+            return new List<Domain.TvShow>();
         }
     }
 }

@@ -6,12 +6,12 @@ namespace Domain
     {
         public TvShow()
         {
-            
+
         }
 
-        public TvShow(int id, string name, string language, DateTime premiered, List<string> genres, string summary)
+        public TvShow(int externalId, string name, string? language, DateTime? premiered, List<string> genres, string? summary)
         {
-            Id = id;
+            ExternalId = externalId;
             Name = name;
             Language = language;
             Premiered = premiered;
@@ -20,14 +20,15 @@ namespace Domain
         }
 
         public int Id { get; private set; }
+        public int ExternalId { get; private set; }
 
         [StringLength(100)]
         public string Name { get; private set; }
 
         [StringLength(50)]
-        public string Language { get; private set; }
-        public DateTime Premiered { get; private set; }
-        public string Genres { get; private set; }
-        public string Summary { get; private set; }
+        public string? Language { get; private set; }
+        public DateTime? Premiered { get; private set; }
+        public string? Genres { get; private set; }
+        public string? Summary { get; private set; }
     }
 }

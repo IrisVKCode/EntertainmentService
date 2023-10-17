@@ -8,26 +8,29 @@ using Application.Services;
 using Polly;
 using Polly.Extensions.Http;
 using Infrastructure.BackgroundServices;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Configuration
 {
     public static class Configuration
     {
-        public static IServiceCollection ConfigureDatabase(this IServiceCollection services, string connectionString)
+        public static IServiceCollection ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
             return services;
         }
 
-        public static IServiceCollection ConfigureHttpClients(this IServiceCollection services, HttpClientConfig config)
+        public static IServiceCollection ConfigureHttpClients(this IServiceCollection services, IConfiguration configuration)
         {
+            var httpClientConfig = configuration.GetSection("HttpClients").Get<HttpClientConfig>();
+
             services.AddHttpClient<ITvShowClient, TvMazeClient>(client =>
             {
-                client.BaseAddress = new Uri(config.TvMazeClientUrl);
+                client.BaseAddress = new Uri(httpClientConfig.TvMazeClientUrl);
             })
             .AddPolicyHandler(GetRetryPolicy())
             .AddPolicyHandler(GetCircuitBreaker());

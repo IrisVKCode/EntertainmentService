@@ -2,7 +2,6 @@ using Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.ConfigureInfraServices();
 
 //var mappingConfig = new MapperConfiguration(mc =>
 //{
@@ -20,13 +19,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.ConfigureDatabase(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-var httpClientConfigSection = builder.Configuration.GetSection("HttpClients");
-builder.Services.Configure<HttpClientConfig>(httpClientConfigSection);
-var httpClientConfig = httpClientConfigSection.Get<HttpClientConfig>();
-
-builder.Services.ConfigureHttpClients(httpClientConfig);
+builder.Services.ConfigureDatabase(builder.Configuration);
+builder.Services.ConfigureInfraServices();
+builder.Services.ConfigureHttpClients(builder.Configuration);
 builder.Services.ConfigureBackgroundServices();
 
 var app = builder.Build();

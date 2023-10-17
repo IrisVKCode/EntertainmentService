@@ -20,17 +20,17 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<TvShow> GetByName(string name)
+        public async Task<TvShow?> GetByName(string name)
         {
             return await _context.TvShows
                 .Where(show => show.Name.ToLower() == name.ToLower())
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<TvShow> GetLatestAdded()
+        public async Task<TvShow?> GetLatestAdded()
         {
             return await _context.TvShows
-                .OrderByDescending(show => show.Id)
+                .OrderByDescending(show => show.ExternalId)
                 .FirstOrDefaultAsync();
         }
 
