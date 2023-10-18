@@ -46,18 +46,6 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task Update(int id)
-        {
-            var show = await _context.TvShows.FindAsync(id);
-
-            if (show != null)
-            {
-                _context.TvShows.Remove(show);
-            }
-
-            await _context.SaveChangesAsync();
-        }
-
         public async Task Delete(int id)
         {
             var show = await _context.TvShows.FindAsync(id);

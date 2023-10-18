@@ -2,19 +2,6 @@ using Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-//var mappingConfig = new MapperConfiguration(mc =>
-//{
-//    mc.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
-//    mc.AddProfile(new AutoProfiler());
-//    mc.ShouldMapMethod = (x) => { return false; };
-
-//});
-
-//IMapper mapper = mappingConfig.CreateMapper();
-//builder.Services.AddSingleton(mapper);
-
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

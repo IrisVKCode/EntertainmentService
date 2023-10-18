@@ -3,7 +3,6 @@ using Application.IRepositories;
 using Application.Services;
 using Domain;
 using Moq;
-using NUnit.Framework;
 
 namespace Tests
 {
@@ -21,26 +20,34 @@ namespace Tests
             _sut = new TvShowService(_mockTvShowRepo.Object, _mockTvShowClient.Object);
         }
 
-        //[Test] public async Task AddNewShowsFromApiAsync_NewShowsAvailable_AddToDatabaseAsync()
-        //{
-        //    // Arrange
-        //    TvShow tvShow = null;
-        //    _mockTvShowRepo.Setup(r => r.GetLatestAdded())
-        //        .ReturnsAsync(new TvShow(1, "One", "NL", new DateTime(2020, 01, 01), new List<string> { "action" }, "summary" ));
-        //    _mockTvShowClient.SetupSequence(t => t.GetTvShowsAsync(It.IsAny<int>())
-        //        .ReturnsAsync(new List<TvShow> {
-        //            new TvShow(1, "One", "NL", new DateTime(2020, 01, 01), new List<string> { "action" }, "summary") })
-        //        .ReturnsAsync(tvShow));
+        [Test]
+        public async Task RetrieveNewestShows_NewShowsAvailable_AddToDatabaseAsync()
+        {
+            // Arrange
+            var latestAddedShow = new TvShowBuilder().WithExternalId(512).Build();
+            var newShowValidDate = new TvShowBuilder().WithExternalId(513).WithPremiereDate(new DateTime(2020,12,12)).Build();
+            var newShowValidDate2 = new TvShowBuilder().WithExternalId(515).WithPremiereDate(new DateTime(2020, 12, 13)).Build();
+            var newShowInvalidDate = new TvShowBuilder().WithExternalId(514).WithPremiereDate(new DateTime(2001, 01, 01)).Build();
 
-        //    // Act
-        //    await _sut.AddNewShowsFromApiAsync();
+            _mockTvShowRepo.Setup(repo => repo.GetLatestAdded())
+                .ReturnsAsync(latestAddedShow);
 
-        //    // Assert
+            _mockTvShowClient.SetupSequence(cl => cl.GetTvShowsAsync(It.IsAny<int>()))
+                .ReturnsAsync(new List<TvShow> { latestAddedShow, newShowValidDate, newShowValidDate2, newShowInvalidDate })
+                .ReturnsAsync(new List<TvShow>());
 
-        //    _mockTvShowClient.Verify(t => t.GetTvShowsAsync(It.IsAny<int>()), Times.Exactly(2));
-        //    _mockTvShowRepo.Verify(t => t.AddBatch(It.IsAny<List<TvShow>>()), Times.Exactly(2));
-        //    // check if all db calls to AddBatch have correct date
-        //    // check if correct page number has been used
-        //}
+            // Act
+            await _sut.RetrieveNewestShows();
+
+            // Assert
+            _mockTvShowClient.Verify(cl => cl.GetTvShowsAsync(It.IsAny<int>()), Times.Exactly(2));
+            _mockTvShowClient.Verify(cl => cl.GetTvShowsAsync(2));
+            _mockTvShowClient.Verify(cl => cl.GetTvShowsAsync(3));
+
+            _mockTvShowRepo.Verify(repo => repo.AddBatch(It.Is<IEnumerable<TvShow>>(shows =>
+                shows.Contains(newShowValidDate) &&
+                shows.Contains(newShowValidDate2) &&
+                !shows.Contains(newShowInvalidDate))), Times.Once);
+        }
     }
 }

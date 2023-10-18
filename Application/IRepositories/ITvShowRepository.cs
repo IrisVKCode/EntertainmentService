@@ -10,6 +10,5 @@ namespace Application.IRepositories
         Task Add(TvShow show);
         Task AddBatch(IEnumerable<TvShow> shows);
         Task Delete(int id);
-        Task Update(int id);
     }
 }
